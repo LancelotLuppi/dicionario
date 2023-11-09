@@ -1,3 +1,6 @@
+#include "stdio.h"
+#include "stdlib.h"
+
 typedef struct Palavra {
     char data[25];
     struct Palavra *left;
