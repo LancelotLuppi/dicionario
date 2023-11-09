@@ -43,7 +43,7 @@ void inorder(Palavra *root) {
         return;
 }
 
-//FIXME: validar operações de hash table
+//TODO: validar operações de hash table
 
 int main() {
 
