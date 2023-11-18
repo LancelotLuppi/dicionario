@@ -47,4 +47,12 @@ void inorder(Palavra *root) {
 
 int main() {
 
+    // TESTES OPERAÇÕES HASH TABLE
+    Tree * bTreeA = malloc(sizeof(Tree));
+    bTreeA->data = 9;
+    HashTable *ht = create_table(CAPACITY);
+    ht_insert(ht, (char *) "A", bTreeA);
+    Tree* tree = ht_search(ht, (char *) "A");
+    tree->data = 4;
+    print_search(ht, (char *) "A");
 }

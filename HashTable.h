@@ -22,7 +22,7 @@ unsigned long hash_function(char *str)
 typedef struct Ht_item
 {
     char *key;
-    Palavra *value;
+    Tree *value;
 } Ht_item;
 
 // Defines the LinkedList.
@@ -143,12 +143,12 @@ void free_overflow_buckets(HashTable *table)
     free(buckets);
 }
 
-Ht_item *create_item(char *key, Palavra *value)
+Ht_item *create_item(char *key, Tree *value)
 {
     // Creates a pointer to a new HashTable item.
     Ht_item *item = (Ht_item *)malloc(sizeof(Ht_item));
     item->key = (char *)malloc(strlen(key) + 1);
-    item->value = (Palavra *)malloc(sizeof(Palavra));
+    item->value = (Tree *)malloc(sizeof(Tree));
     strcpy(item->key, key);
     item->value = value;
     return item;
@@ -215,7 +215,7 @@ void handle_collision(HashTable *table, unsigned long index, Ht_item *item)
     }
 }
 
-void ht_insert(HashTable *table, char *key, Palavra *value)
+void ht_insert(HashTable *table, char *key, Tree *value)
 {
     // Creates the item.
     Ht_item *item = create_item(key, value);
@@ -257,7 +257,7 @@ void ht_insert(HashTable *table, char *key, Palavra *value)
     }
 }
 
-Palavra *ht_search(HashTable *table, char *key)
+Tree *ht_search(HashTable *table, char *key)
 {
     // Searches for the key in the HashTable.
     // Returns NULL if it doesn't exist.
@@ -357,7 +357,7 @@ void ht_delete(HashTable *table, char *key)
 
 void print_search(HashTable *table, char *key)
 {
-    Palavra *val;
+    Tree *val;
 
     if ((val = ht_search(table, key)) == NULL)
     {
@@ -366,7 +366,7 @@ void print_search(HashTable *table, char *key)
     }
     else
     {
-        printf("Key:%s, Value: %s\n", key, val->data);
+        printf("key: %s, value: %d\n", key, val->data);
     }
 }
 
