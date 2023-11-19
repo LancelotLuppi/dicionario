@@ -99,13 +99,76 @@ void showInterface(HashTable *table) {
     }
     // finds
     case 3: {
-      printf("\n\n\n\nDigite a palavra encontrada (até 24 letras): \n\n\n\n");
+      printf("\n\n\n\nDigite a palavra a ser encontrada (até 24 letras): "
+             "\n\n\n\n");
       char word[25] = "";
       scanf("%24s", word);
       // TODO: encontrar a árvore certa
       WordNode *wordTree;
       // ht_search(HashTable * table, char *key);
-      // TODO: find word
+      find_node(wordTree, word);
+      break;
+    }
+    // sums all words
+    case 4: {
+      // TODO: iterar sobre todas as árvores
+      // com callback para a soma de cada árvore?
+      WordNode *wordTree;
+      // ht_search(HashTable * table, char *key);
+      int counter = 0;
+      // Will sum to counter all words of given tree
+      sums_all_words(wordTree, &counter);
+      break;
+    }
+    // sums all words occurrences
+    case 5: {
+      // TODO: iterar sobre todas as árvores
+      // com callback para a soma de cada árvore?
+      WordNode *wordTree;
+      // ht_search(HashTable * table, char *key);
+      int counter = 0;
+      // Will sum to counter all words occurrences of given tree
+      sums_all_words_occurrences(wordTree, &counter);
+      break;
+    }
+    // prints all words with given order
+    case 6: {
+      printf("\n\n\n\nDigite a ordem para listar as palavras (1 para A-Z 0 "
+             "para Z-A): "
+             "\n\n\n\n");
+      int order = 0;
+      scanf("%d", &order);
+      // TODO: iterar sobre todas as árvores
+      // com opção de A-Z e Z-A
+      WordNode *wordTree;
+      // ht_search(HashTable * table, char *key);
+      print_tree(wordTree, order);
+      break;
+    }
+    // prints all words with given order and given initial
+    case 7: {
+      printf("\n\n\n\nDigite a inicial das palavras a serem listadas\n\n\n\n");
+      char initial;
+      scanf("%c", &initial);
+      printf("\n\n\n\nDigite a ordem para listar as palavras (1 para A-Z 0 "
+             "para Z-A): "
+             "\n\n\n\n");
+      int order = 0;
+      scanf("%d", &order);
+      // TODO: find tree with given inital letter
+      WordNode *wordTree;
+      print_tree(wordTree, order);
+      break;
+    }
+    // Finds and prints word (or words) with biggest number of occurrences
+    case 8: {
+      // TODO: iterar sobre todas as árvores para achar a palavra com maior
+      // número de ocorrências em todas as árvores?
+      WordNode *wordTree;
+      // will return a new tree with all the biggest occurences nodes
+      // (nodes with same number of occurences)
+      WordNode *biggestTree = find_biggest_occurrence_number_node(wordTree);
+      print_tree(biggestTree, 0);
       break;
     }
     // Errors
