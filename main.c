@@ -2,8 +2,6 @@
 #include "domain.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "string.h"
-#include "word_tree.c"
 
 // FIXME: site para construcao da HashTable:
 // https://www.digitalocean.com/community/tutorials/hash-table-in-c-plus-plus
@@ -25,19 +23,6 @@ void inorder(Palavra *root) {
     return;
 }
 
-// TODO: validar operações de hash table
-
-int main() {
-
-  // TESTES OPERAÇÕES HASH TABLE
-  Tree *bTreeA = malloc(sizeof(Tree));
-  bTreeA->data = 9;
-  HashTable *ht = create_table(CAPACITY);
-  ht_insert(ht, (char *)"A", bTreeA);
-  Tree *tree = ht_search(ht, (char *)"A");
-  tree->data = 4;
-  print_search(ht, (char *)"A");
-}
 
 void showInterface(HashTable *table) {
   int userInput = -1;
@@ -75,14 +60,20 @@ void showInterface(HashTable *table) {
       break;
     // add
     case 1: {
-      printf("\n\n\n\nDigite a palavra a ser adicionada (até 24 letras): "
-             "\n\n\n\n");
-      char word[25] = "";
-      scanf("%24s", word);
-      // TODO: encontrar a árvore certa
-      WordNode *wordTree;
-      // ht_search(HashTable * table, char *key);
-      insert_or_sum_word(wordTree, word);
+      printf("\n\n\n\nDigite a palavra a ser adicionada (ate 24 letras): \n");
+      char word[25];
+      scanf("%s", word);
+      char key[2];
+      key[0] = word[0];
+      key[1] = '\n';
+      WordNode *node = ht_search(table, key);
+      printf("arvore encontrada \n"); //FIXME remover após debugar
+      if(node == NULL) {
+          printf("null \n"); //FIXME remover após debugar
+          node = insert_or_sum_word(node, word);
+          create_item((char *) word[0], node);
+      }
+      insert_or_sum_word(node, word);
       break;
     }
     // remove
@@ -92,8 +83,7 @@ void showInterface(HashTable *table) {
       char word[25] = "";
       scanf("%24s", word);
       // TODO: encontrar a árvore certa
-      WordNode *wordTree;
-      // ht_search(HashTable * table, char *key);
+      WordNode *wordTree = ht_search(table, (char *) word[0]);
       remove_word(wordTree, word);
       break;
     }
@@ -104,8 +94,7 @@ void showInterface(HashTable *table) {
       char word[25] = "";
       scanf("%24s", word);
       // TODO: encontrar a árvore certa
-      WordNode *wordTree;
-      // ht_search(HashTable * table, char *key);
+      WordNode *wordTree = ht_search(table, (char *) word[0]);
       find_node(wordTree, word);
       break;
     }
@@ -178,4 +167,9 @@ void showInterface(HashTable *table) {
     }
     }
   }
+}
+
+int main() {
+    HashTable *table = create_table(CAPACITY);
+    showInterface(table);
 }
