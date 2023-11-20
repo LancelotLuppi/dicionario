@@ -10,7 +10,6 @@
 #define CAPACITY 50000 // Size of the HashTable.
 
 unsigned long hash_function(char *str) {
-    printf("Chave utiizada: %s", str);
     unsigned long i = 0;
 
     for (int j = 0; str[j]; j++)
@@ -133,11 +132,13 @@ void free_overflow_buckets(HashTable *table) {
 
 Ht_item *create_item(char *key, WordNode *value) {
     // Creates a pointer to a new HashTable item.
+    printf("Criando item na tabela hash...\n");
     Ht_item *item = (Ht_item *) malloc(sizeof(Ht_item));
     item->key = (char *) malloc(strlen(key) + 1);
     item->value = (WordNode *) malloc(sizeof(WordNode));
     strcpy(item->key, key);
     item->value = value;
+    printf("Item criado na tabela\n");
     return item;
 }
 
@@ -200,6 +201,7 @@ void ht_insert(HashTable *table, char *key, WordNode *value) {
 
     // Computes the index.
     int index = hash_function(key);
+    printf("Item criado no index %d\n", index); //FIXME: remover após debugar
 
     Ht_item *current_item = table->items[index];
 
@@ -231,24 +233,28 @@ void ht_insert(HashTable *table, char *key, WordNode *value) {
 WordNode *ht_search(HashTable *table, char *key) {
     // Searches for the key in the HashTable.
     // Returns NULL if it doesn't exist.
-    printf("Iniciando busca na hash table, chave utilizada: %c\n", *key);
+    printf("Iniciando busca na hash table, chave utilizada: %c\n", *key); //FIXME: remover após debugar
     int index = hash_function(key);
-    printf("hash gerado\n");
+    printf("Item pesquisado no index %d\n", index); //FIXME: remover após debugar
     Ht_item *item = table->items[index];
     LinkedList *head = table->overflow_buckets[index];
 
     // Provide only non-NULL values.
     if (item != NULL) {
-        if (strcmp(item->key, key) == 0)
+        if (strcmp(item->key, key) == 0){
+            printf("Item encontrado\n\n"); //FIXME: remover após debugar
             return item->value;
+        }
 
-        if (head == NULL)
+        if (head == NULL) {
+            printf("Head null.\n\n"); //FIXME: remover após debugar
+        }
             return NULL;
 
         item = head->item;
         head = head->next;
     }
-
+    printf("Item nao criado.\n\n"); //FIXME: remover após debugar
     return NULL;
 }
 
