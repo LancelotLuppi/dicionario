@@ -7,7 +7,6 @@
 // any
 // to the right of the node there should be an lexicographically bigger word
 // if any
-// TODO: adaptar à hash table
 typedef struct WordNode {
   char word[25];
   int occurences;
@@ -15,10 +14,10 @@ typedef struct WordNode {
   struct WordNode *right;
 } WordNode;
 
-WordNode *create_word(char word[25]) {
+WordNode *create_word(char word[25], int occurrences) {
   WordNode *newWord = (WordNode *)malloc(sizeof(WordNode));
   strcpy(newWord->word, word);
-  newWord->occurences = 1;
+  newWord->occurences = occurrences;
   newWord->left = NULL;
   newWord->right = NULL;
   printf("arvore criada \n"); // FIXME: remover após debugar;
@@ -97,7 +96,6 @@ WordNode *find_node(WordNode *node, char word[25]) {
   return node;
 }
 
-// TODO: test
 // this will be used to list same occurrence number nodes
 WordNode *insert_node(WordNode *node, WordNode *insertNode) {
   if (node == NULL) {
@@ -107,43 +105,57 @@ WordNode *insert_node(WordNode *node, WordNode *insertNode) {
   int conditional = is_alphabetically_after(insertNode->word, node->word);
 
   if (conditional > 0) {
-    node->right = insert_node(node, insertNode);
+    node->right = insert_node(node->right, insertNode);
   } else if (conditional < 0) {
-    node->left = insert_node(node, insertNode);
+    node->left = insert_node(node->left, insertNode);
   }
 
   return node;
 }
 
-// FIXME this function doesn't works
 // finds biggest node of tree
-WordNode *find_biggest_occurrence_number_node(WordNode *node,
-                                              WordNode *biggest) {
+WordNode *find_x_occurrence_number_node(WordNode *node, WordNode *xtree,
+                                        int x) {
   if (node != NULL) {
-    printf("\nteste1\n");
-    // Uses new tree to copy same occurrence number nodes
-    printf("\nIsNull %d\n", biggest != NULL);
-    printf("occurrences%d", biggest->occurences);
-    if (biggest == NULL) {
-      printf("\ntestecinquenta5\n");
-      biggest = create_word(node->word);
+    // Uses new tree to copy x occurrence number nodes
+    if (!xtree) {
+      if (node->occurences == x)
+        xtree = create_word(node->word, node->occurences);
     } else {
-      printf("\nteste2\n");
+      if (node->occurences == x) {
+        insert_node(xtree, create_word(node->word, node->occurences));
+      }
+    }
+
+    find_x_occurrence_number_node(node->right, xtree, x);
+    find_x_occurrence_number_node(node->left, xtree, x);
+  }
+
+  return xtree;
+}
+
+// finds biggest node of tree
+WordNode *find_biggest_occurrence_number_node(WordNode *node, WordNode *biggest,
+                                              int useless) {
+  if (node != NULL) {
+    // Uses new tree to copy same occurrence number nodes
+    if (!biggest) {
+      biggest = create_word(node->word, node->occurences);
+    } else {
       // If node is bigger than biggest, overwrite biggest with node
       if (biggest->occurences < node->occurences) {
-        biggest = node;
+        free(biggest);
+        biggest = create_word(node->word, node->occurences);
       }
       // If node is equal with biggest, adds node to biggest tree
       else if (biggest->occurences == node->occurences) {
-        printf("\nteste3\n");
         insert_node(biggest, node);
       }
     }
 
-    find_biggest_occurrence_number_node(node->right, biggest);
-    find_biggest_occurrence_number_node(node->left, biggest);
+    find_biggest_occurrence_number_node(node->right, biggest, useless);
+    find_biggest_occurrence_number_node(node->left, biggest, useless);
   }
-  printf("\nteste4\n");
 
   return biggest;
 }
@@ -151,7 +163,7 @@ WordNode *find_biggest_occurrence_number_node(WordNode *node,
 WordNode *insert_or_sum_word(WordNode *node, char word[25]) {
   if (node == NULL) {
     printf("Arvore ainda nao criada, criando nova arvore...\n");
-    return create_word(word);
+    return create_word(word, 1);
   }
 
   printf("\nInsert or sum\n");
@@ -172,7 +184,6 @@ WordNode *insert_or_sum_word(WordNode *node, char word[25]) {
   return node;
 }
 
-// TODO: test
 WordNode *remove_word(WordNode *node, char word[25]) {
   if (node == NULL) {
     return node;
@@ -181,14 +192,18 @@ WordNode *remove_word(WordNode *node, char word[25]) {
   int conditional = is_alphabetically_after(word, node->word);
 
   if (conditional > 0) {
-    node->right = remove_word(node, word);
+    node->right = remove_word(node->right, word);
   } else if (conditional < 0) {
-    node->left = remove_word(node, word);
+    node->left = remove_word(node->left, word);
   }
   // Node to be deleted found
   else {
     // Node with only one child or no child
-    if (node->left == NULL) {
+    if (node->left == NULL && node->right == NULL) {
+      printf("\nAmbos galhos são nulos\n");
+      node->occurences = 0;
+      return NULL;
+    } else if (node->left == NULL) {
       WordNode *temporary = node->right;
       free(node);
       return temporary;

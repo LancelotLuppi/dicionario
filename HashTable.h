@@ -47,13 +47,13 @@ LinkedList *allocate_list() {
 
 // Define a callback function type
 typedef void (*CallbackFunc)(WordNode *, int);
-typedef WordNode *(*CallbackFuncReturnsNode)(WordNode *, WordNode *);
+typedef WordNode *(*CallbackFuncReturnsNode)(WordNode *, WordNode *, int);
 typedef void (*CallbackFuncWithCounter)(WordNode *, int *);
 
 void for_each_hash_table_item(HashTable *table, CallbackFunc function,
                               int order) {
   if (table->items) {
-    if (!order) {
+    if (order) {
       for (int i = 0; i < table->size; i++) {
         if (table->items[i]) {
           function(table->items[i]->value, order);
@@ -71,14 +71,13 @@ void for_each_hash_table_item(HashTable *table, CallbackFunc function,
 
 WordNode *
 for_each_hash_table_item_returns_node(HashTable *table,
-                                      CallbackFuncReturnsNode function) {
-  WordNode *biggest;
+                                      CallbackFuncReturnsNode function, int x) {
+  WordNode *biggest = NULL;
 
   if (table->items) {
-    for (int i = 0; i < table->size; i++) {
+    for (int i = table->size; i >= 0; i--) {
       if (table->items[i]) {
-        printf("\nteste0\n");
-        biggest = function(table->items[i]->value, biggest);
+        biggest = function(table->items[i]->value, biggest, x);
       }
     }
   }

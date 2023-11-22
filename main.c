@@ -44,8 +44,10 @@ void showInterface(HashTable *table) {
     printf("  7) Listar todas as palavras com uma inicial específica\n");
     printf("  8) Exibir palavra(s) com maior número de ocorrências\n");
     // Originalmente, com 1 única ocorrência
-    printf("  9) Exibir palavra(s) em ordem alfabética com x número de "
+    printf("  9) Exibir palavra(s) com x número de "
            "ocorrências\n");
+    // TODO: Já foi implementado? Pré vs pós não seria ordem alfabética e
+    // alfabética inversa?
     printf("  10) Exibir palavras usando percurso pré-fixado\n");
     printf("  0) Fechar o programa.\n");
 
@@ -86,6 +88,10 @@ void showInterface(HashTable *table) {
       key[1] = '\0';
       WordNode *wordTree = ht_search(table, key);
       remove_word(wordTree, word);
+
+      if (!(wordTree->occurences)) {
+        ht_delete(table, key);
+      }
       break;
     }
       // finds
@@ -151,9 +157,24 @@ void showInterface(HashTable *table) {
       // will return a new tree with all the biggest occurences nodes
       // (nodes with same number of occurences)
       WordNode *biggestTree = for_each_hash_table_item_returns_node(
-          table, &find_biggest_occurrence_number_node);
+          table, &find_biggest_occurrence_number_node, 0);
 
       print_tree(biggestTree, 0);
+      break;
+    }
+      // Finds and prints word (or words) with x number of occurrences
+    case 9: {
+      printf("\n\n\n\nDigite o número de ocorrências das palavras a serem "
+             "listadas\n\n\n\n");
+
+      int x = 0;
+      scanf("%d", &x);
+
+      // will return a new tree with all the x occurences nodes
+      WordNode *xTree = for_each_hash_table_item_returns_node(
+          table, &find_x_occurrence_number_node, x);
+
+      print_tree(xTree, 0);
       break;
     }
       // Errors
