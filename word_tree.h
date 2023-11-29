@@ -20,7 +20,6 @@ WordNode *create_word(char word[25], int occurrences) {
   newWord->occurences = occurrences;
   newWord->left = NULL;
   newWord->right = NULL;
-  printf("arvore criada \n"); // FIXME: remover após debugar;
   return newWord;
 }
 
@@ -53,6 +52,14 @@ void print_tree(WordNode *node, int order) {
       print_tree(node->left, order);
     }
   }
+}
+
+void preorder_print(WordNode *node, int order) {
+    if(node != NULL) {
+        printf("%s \n", node->word);
+        preorder_print(node->left, order);
+        preorder_print(node->right, order);
+    }
 }
 
 void sums_all_words(WordNode *node, int *counter) {
@@ -162,7 +169,6 @@ WordNode *find_biggest_occurrence_number_node(WordNode *node, WordNode *biggest,
 
 WordNode *insert_or_sum_word(WordNode *node, char word[25]) {
   if (node == NULL) {
-    printf("Arvore ainda nao criada, criando nova arvore...\n");
     return create_word(word, 1);
   }
 

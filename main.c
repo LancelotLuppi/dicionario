@@ -3,16 +3,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-// FIXME: site para construcao da HashTable:
+// FIXME: site base para construcao da HashTable:
 // https://www.digitalocean.com/community/tutorials/hash-table-in-c-plus-plus
-
-// FIXME: se tudo der errado usar lista duplamente encadeada
-// typedef struct Letra {
-//     char data;
-//     struct Letra *next;
-//     struct Letra *prev;
-//     Palavra *palavras;
-// } Letra;
 
 void inorder(Palavra *root) {
   if (root != NULL) {
@@ -36,19 +28,15 @@ void showInterface(HashTable *table) {
     printf("  2) Remover palavra do dicionário\n");
     printf("  3) Encontrar palavra\n");
     printf("  4) Contar palavras (retorna o número total de palavras)\n");
-    // TODO: ocorrências de uma palavra ou de todas as palavras?
     printf("  5) Contar ocorrências (retorna o número total de ocorrências de "
            "palavras)\n");
-    // TODO: opção de ordem A-Z ou Z-A
     printf("  6) Listar todas as palavras\n");
     printf("  7) Listar todas as palavras com uma inicial específica\n");
     printf("  8) Exibir palavra(s) com maior número de ocorrências\n");
-    // Originalmente, com 1 única ocorrência
     printf("  9) Exibir palavra(s) com x número de "
            "ocorrências\n");
-    // TODO: Já foi implementado? Pré vs pós não seria ordem alfabética e
-    // alfabética inversa?
-    printf("  10) Exibir palavras usando percurso pré-fixado\n");
+    printf("  10) Exibir arvore usando percurso pré-fixado\n");
+      printf("  11) Exibir dicionario usando percurso pré-fixado\n");
     printf("  0) Fechar o programa.\n");
 
     scanf("%d", &userInput);
@@ -75,9 +63,6 @@ void showInterface(HashTable *table) {
       }
       break;
     }
-      // remove
-      // FIXME: when there is only one word and it gets deleted, the tree
-      // continues with a ghost item
     case 2: {
       printf(
           "\n\n\n\nDigite a palavra a ser removida (até 24 letras): \n\n\n\n");
@@ -176,6 +161,32 @@ void showInterface(HashTable *table) {
 
       print_tree(xTree, 0);
       break;
+    }
+    case 10: {
+        printf("\n\n\n\nPercursão pré-fixadan a partir de inicial\n\n");
+        printf("Informe uma letra: \n");
+        char key[2];
+        scanf(" %c", &key[0]);
+        key[1] = '\0';
+        WordNode *wordTree = ht_search(table, key);
+        if(wordTree == NULL) {
+            printf("Arvore vazia.");
+            break;
+        }
+        preorder_print(wordTree, 1);
+        printf("Fim da lista.\n");
+        break;
+    }
+    case 11: {
+        printf("\n\n\n\nPercursão pré-fixada de todo dicionario\n\n");
+        printf("\n\nDigite a ordem para listar as palavras (1 para A-Z 0 "
+               "para Z-A): "
+               "\n\n");
+        int order = 0;
+        scanf("%d", &order);
+        for_each_hash_table_item(table, &preorder_print, order);
+        printf("Fim da lista.\n");
+        break;
     }
       // Errors
     default: {
