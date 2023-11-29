@@ -90,9 +90,9 @@ WordNode *find_node(WordNode *node, char word[25]) {
   int conditional = is_alphabetically_after(word, node->word);
 
   if (conditional > 0) {
-    node->right = find_node(node, word);
+    node->right = find_node(node->right, word);
   } else if (conditional < 0) {
-    node->left = find_node(node, word);
+    node->left = find_node(node->left, word);
   }
   // found
   else {
@@ -121,24 +121,16 @@ WordNode *insert_node(WordNode *node, WordNode *insertNode) {
 }
 
 // finds biggest node of tree
-WordNode *find_x_occurrence_number_node(WordNode *node, WordNode *xtree,
-                                        int x) {
+void find_x_occurrence_number_node(WordNode *node, int x) {
   if (node != NULL) {
     // Uses new tree to copy x occurrence number nodes
-    if (!xtree) {
-      if (node->occurences == x)
-        xtree = create_word(node->word, node->occurences);
-    } else {
-      if (node->occurences == x) {
-        insert_node(xtree, create_word(node->word, node->occurences));
-      }
+    if (node->occurences == x) {
+      print_word_node(node);
     }
 
-    find_x_occurrence_number_node(node->right, xtree, x);
-    find_x_occurrence_number_node(node->left, xtree, x);
+    find_x_occurrence_number_node(node->right, x);
+    find_x_occurrence_number_node(node->left, x);
   }
-
-  return xtree;
 }
 
 // finds biggest node of tree

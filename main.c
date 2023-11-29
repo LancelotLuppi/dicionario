@@ -36,7 +36,7 @@ void showInterface(HashTable *table) {
     printf("  9) Exibir palavra(s) com x número de "
            "ocorrências\n");
     printf("  10) Exibir arvore usando percurso pré-fixado\n");
-      printf("  11) Exibir dicionario usando percurso pré-fixado\n");
+    printf("  11) Exibir dicionario usando percurso pré-fixado\n");
     printf("  0) Fechar o programa.\n");
 
     scanf("%d", &userInput);
@@ -155,11 +155,8 @@ void showInterface(HashTable *table) {
       int x = 0;
       scanf("%d", &x);
 
-      // will return a new tree with all the x occurences nodes
-      WordNode *xTree = for_each_hash_table_item_returns_node(
-          table, &find_x_occurrence_number_node, x);
+      for_each_hash_table_item(table, &find_x_occurrence_number_node, x);
 
-      print_tree(xTree, 0);
       break;
     }
     case 10: {
@@ -176,6 +173,10 @@ void showInterface(HashTable *table) {
         preorder_print(wordTree, 1);
         printf("Fim da lista.\n");
         break;
+      }
+      preorder_print(wordTree, 1);
+      printf("Fim da lista.\n");
+      break;
     }
     case 11: {
         printf("\n\n\n\nPercursão pré-fixada de todo dicionario\n\n");
